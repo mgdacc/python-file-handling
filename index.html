@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentación Interactiva: File Handling en Python</title>
+    <style>
+        /* === ESTILOS GLOBALES Y DE ESCRITORIO === */
+        body {
+            font-family: Arial, sans-serif; background-color: #f0f0f0; margin: 0;
+            padding: 40px; display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; box-sizing: border-box; transition: padding 0.3s ease;
+        }
+
+        .slideshow-container { position: relative; width: 90%; max-width: 960px; }
+        
+        .slide {
+            display: none; background-color: #fff; border: 1px solid #ccc;
+            height: 540px; padding: 40px 60px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            flex-direction: column; justify-content: center; position: relative;
+            box-sizing: border-box;
+        }
+
+        .fade { animation-name: fade; animation-duration: 0.5s; }
+        @keyframes fade { from {opacity: .4} to {opacity: 1} }
+
+        .prev, .next {
+            cursor: pointer; position: absolute; top: 50%; transform: translateY(-50%);
+            width: 50px; height: 50px; background-color: #cccccc; color: #333;
+            border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: flex; justify-content: center; align-items: center;
+            font-weight: bold; font-size: 24px; transition: all 0.3s ease;
+            user-select: none; z-index: 10;
+        }
+
+        .prev { left: -70px; }
+        .next { right: -70px; }
+        .prev:hover, .next:hover { background-color: #aaaaaa; }
+
+        .slide h1 { font-size: 3.5em; text-align: center; border-bottom: 4px solid #11a800; padding-bottom: 20px; color: #005A9C; }
+        .slide h2 { font-size: 2.8em; margin-top: 0; margin-bottom: 30px; text-align: center; color: #005A9C; }
+        .single-content { text-align: center; }
+        .single-content p { font-size: 1.5em; color: #444; }
+        .single-content pre { font-size: 1.3em; display: inline-block; text-align: left; max-width: 100%; }
+        pre { background-color: #2d3636; color: #fff; padding: 15px; border-radius: 5px; font-size: 1.1em; white-space: pre-wrap; }
+        .footer { position: absolute; bottom: 20px; right: 40px; font-size: 1em; color: #888; }
+
+        /* === MEDIA QUERIES === */
+        @media screen and (max-width: 768px) {
+            body { padding: 15px; }
+            .slideshow-container { width: 100%; padding-bottom: 75px; }
+            .slide { height: auto; min-height: 75vh; padding: 20px 25px; }
+            .prev, .next { top: auto; bottom: 15px; width: 45px; height: 45px; }
+            .prev { left: 50%; transform: translateX(-110%); }
+            .next { left: 50%; transform: translateX(10%); right: auto; }
+            .slide h1 { font-size: 2.2em; }
+            .slide h2 { font-size: 1.8em; }
+            .single-content p { font-size: 1.1em; }
+            .single-content pre { font-size: 1em; }
+            .footer { font-size: 0.8em; right: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="slideshow-container">
+        
+        <div class="slide fade">
+            <h1>Cheat Sheet de Python</h1>
+            <h2 style="color:#333; border:none;">File Handling</h2>
+            <div class="footer">1 / 13</div>
+        </div>
+
+        <div class="slide fade">
+            <h2>¿Qué es el File Handling?</h2>
+            <div class="single-content"><p>El proceso de crear, leer, actualizar y eliminar archivos. Es la forma en que los programas interactúan con datos persistentes.</p></div>
+            <div class="footer">2 / 13</div>
+        </div>
+
+        <div class="slide fade">
+            <h2>La Forma Correcta: <code>with open()</code></h2>
+            <div class="single-content"><p>La declaración `with` es la forma segura y recomendada. Cierra el archivo automáticamente, incluso si ocurren errores.</p><pre><code>with open("mi_archivo.txt", "r") as f:
+    # Trabaja con el archivo 'f' aquí
+# El archivo ya está cerrado aquí.</code></pre></div>
+            <div class="footer">3 / 13</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>Modos de Apertura</h2>
+            <div class="single-content"><p>El segundo argumento de `open()` es el modo.</p><pre><code>'r' - Lectura (Read). Es el modo por defecto. Da error si el archivo no existe.
+'w' - Escritura (Write). Crea el archivo si no existe, lo SOBREESCRIBE si existe.
+'a' - Añadir (Append). Crea el archivo si no existe, añade contenido al final si existe.</code></pre></div>
+            <div class="footer">4 / 13</div>
+        </div>
+
+        <div class="slide fade">
+            <h2>Leer un Archivo Completo</h2>
+            <div class="single-content"><p>El método <code>.read()</code> lee todo el contenido del archivo en un solo string.</p><pre><code>with open("poema.txt", "r") as f:
+    contenido = f.read()
+    print(contenido)</code></pre></div>
+            <div class="footer">5 / 13</div>
+        </div>
+
+        <div class="slide fade">
+            <h2>Leer Línea por Línea</h2>
+            <div class="single-content"><p>La forma más común y eficiente para archivos grandes es iterar directamente sobre el objeto del archivo.</p><pre><code>with open("log.txt", "r") as f:
+    for linea in f:
+        print(linea.strip()) # .strip() quita saltos de línea</code></pre></div>
+            <div class="footer">6 / 13</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>Escribir en un Archivo: <code>'w'</code></h2>
+            <div class="single-content"><p>El modo <code>'w'</code> borra el contenido anterior del archivo antes de escribir.</p><pre><code>with open("saludo.txt", "w") as f:
+    f.write("Hola, Mundo.\n")
+    f.write("Esta es una nueva línea.")</code></pre></div>
+            <div class="footer">7 / 13</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>Añadir a un Archivo: <code>'a'</code></h2>
+            <div class="single-content"><p>El modo <code>'a'</code> agrega contenido al final del archivo, conservando lo que ya existía.</p><pre><code>with open("log_eventos.txt", "a") as f:
+    f.write("Nuevo evento registrado.\n")</code></pre></div>
+            <div class="footer">8 / 13</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>Rutas de Archivos: <code>pathlib</code></h2>
+            <div class="single-content"><p>El módulo `pathlib` es la forma moderna de manejar rutas de archivos de manera robusta.</p><pre><code>from pathlib import Path
+
+ruta_archivo = Path("datos") / "reporte.txt"
+
+with open(ruta_archivo, "r") as f:
+    # ...
+</code></pre></div>
+            <div class="footer">9 / 13</div>
+        </div>
+
+        <div class="slide fade">
+            <h2>Caso de Uso: Archivos JSON</h2>
+            <div class="single-content"><p>El módulo `json` es perfecto para guardar y leer estructuras de datos como listas y diccionarios.</p></div>
+            <div class="footer">10 / 13</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>Escribir JSON: <code>json.dump()</code></h2>
+            <div class="single-content"><p>Guarda un objeto de Python (ej. un diccionario) en un archivo en formato JSON.</p><pre><code>import json
+
+datos = {"nombre": "Ana", "edad": 30}
+
+with open("usuario.json", "w") as f:
+    json.dump(datos, f, indent=4)</code></pre></div>
+            <div class="footer">11 / 13</div>
+        </div>
+
+        <div class="slide fade">
+            <h2>Leer JSON: <code>json.load()</code></h2>
+            <div class="single-content"><p>Carga datos desde un archivo JSON y los convierte en un objeto de Python.</p><pre><code>import json
+
+with open("usuario.json", "r") as f:
+    datos_cargados = json.load(f)
+
+print(datos_cargados["nombre"]) # Ana</code></pre></div>
+            <div class="footer">12 / 13</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>Caso de Uso: Archivos CSV</h2>
+            <div class="single-content"><p>El módulo `csv` facilita la lectura y escritura de archivos de valores separados por comas.</p><pre><code>import csv
+
+with open("datos.csv", "r") as f:
+    lector_csv = csv.reader(f)
+    for fila in lector_csv:
+        print(fila) # Cada fila es una lista de strings</code></pre></div>
+            <div class="footer">13 / 13</div>
+        </div>
+
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+
+    <script>
+        let slideIndex = 1;
+        showSlides(slideIndex);
+
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        function showSlides(n) {
+            let i;
+            let slides = document.getElementsByClassName("slide");
+            if (n > slides.length) { slideIndex = 1 } 
+            if (n < 1) { slideIndex = slides.length }
+            
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            
+            slides[slideIndex - 1].style.display = "flex";
+        }
+    </script>
+
+</body>
+</html>
